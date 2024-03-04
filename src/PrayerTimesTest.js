@@ -15,6 +15,7 @@ function PrayerTimes() {
   const [hijriMonth, setHijriMonth] = useState("");
   const [hijriYear, setHijriYear] = useState("");
   const [hijriDay, setHijriDay] = useState("");
+  
  */
 
   const [isRamadan, setIsRamadan] = useState(false);
