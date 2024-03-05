@@ -30,7 +30,7 @@ function PrayerTimes() {
       setCurrentTime(formattedTime);
     }, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, );
 
   const fetchPrayerData = async () => {
     try {
@@ -52,12 +52,7 @@ function PrayerTimes() {
       const todayData = data.data.timings;
       setPrayerMasterData(todayData);
       const hijriNumber = data.data.date.hijri.month.number;
-      /*
-      const hijriDate = data.data[0].date.hijri;
-      setHijriMonth(hijriDate.month.en);
-      setHijriYear(hijriDate.year);
-      setHijriDay(hijriDate.day);
-*/
+
       const iqma_response = await fetch(
         "https://docs.google.com/spreadsheets/d/e/2PACX-1vSeZ26h2oufYXq0i04ioOoH7aDkOHl0pvQ9E8mbIzxpVsElIoeUq0FJhwRgHkaiRlPn6IEcoM-0vty9/pub?output=csv"
       );
