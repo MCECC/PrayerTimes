@@ -180,7 +180,7 @@ function PrayerTimes() {
         <h2 id="dateElement">{formattedDate}</h2>
 
         <h3 id="currentTimeElement">Local Time: {currentTime}</h3>
-        {!isRamadan ? (
+        {isRamadan ? (
           <>
             <h2 id="title">Ramadan Times</h2>
             <div className="ramadan_wrapper" id="pr;ayerTimes">
@@ -203,7 +203,7 @@ function PrayerTimes() {
         )}
       </div>
       <div>
-        {!isRamadan ?  <h2 id="title">Prayer Times</h2>:<></> }
+        {isRamadan ?  <h2 id="title">Prayer Times</h2>:<></> }
        
         <div className="prayer-info">
           {prayerTimes.map((prayer) => (
