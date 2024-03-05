@@ -30,24 +30,16 @@ function PrayerTimes() {
       setCurrentTime(formattedTime);
     }, 1000);
     return () => clearInterval(interval);
-  }, );
+  }, []);
 
   const fetchPrayerData = async () => {
     try {
       const currentDate = new Date();
-      const formattedDate = `${currentDate.getDate()}-${
-        currentDate.getMonth() + 1
-      }-${currentDate.getFullYear()}`;
 
-      const address = encodeURIComponent(
-        "5281 Casa Bella St, San Antonio, Texas, United States"
-      );
-      const method = 2;
-
+    
       const response = await fetch(
-        `https://api.aladhan.com/v1/timingsByAddress/${formattedDate}?address=${address}&method=${method}`
+        `https://prayerdata.contact-c64.workers.dev/`
       );
-
       const data = await response.json();
       const todayData = data.data.timings;
       setPrayerMasterData(todayData);
