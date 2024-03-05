@@ -23,6 +23,102 @@ function PrayerTimes() {
   const [isRamadan, setIsRamadan] = useState(false);
 
   useEffect(() => {
+    const fetchPrayerData = async () => {
+      try {
+        const currentDate = new Date();
+
+        const response = await fetch(
+          `https://prayerdata.contact-c64.workers.dev/`
+        );
+        const data = await response.json();
+        const todayData = data.data.timings;
+        setPrayerMasterData(todayData);
+        const hijriNumber = data.data.date.hijri.month.number;
+
+        const iqma_response = await fetch(
+          "https://docs.google.com/spreadsheets/d/e/2PACX-1vSeZ26h2oufYXq0i04ioOoH7aDkOHl0pvQ9E8mbIzxpVsElIoeUq0FJhwRgHkaiRlPn6IEcoM-0vty9/pub?output=csv"
+        );
+        const Iqma_data = await iqma_response.text();
+        const rows = Iqma_data.split("\n");
+        const headerRow = rows[0].split(",");
+
+        // const date_startIndex = headerRow.indexOf("Date Start");
+        const date_endIndex = headerRow.indexOf("Date End");
+        const fajrIndex = headerRow.indexOf("Fajr");
+        const dhuhrIndex = headerRow.indexOf("Dhur");
+        const asrIndex = headerRow.indexOf("Asr");
+        const maghribIndex = headerRow.indexOf("Maghrib");
+        const ishaIndex = headerRow.findIndex((header) =>
+          header.includes("Isha")
+        );
+        if (hijriNumber === 9) {
+          setIsRamadan(true);
+        } else {
+          setIsRamadan(false);
+        }
+
+        // Extracting prayer times from the API response
+        function convertTo12HourFormat(time24, offsetMinutes = 0) {
+          const [hour, minute] = time24.split(":");
+          let adjustedHour = parseInt(hour, 10);
+          let adjustedMinute = parseInt(minute, 10) + offsetMinutes;
+
+          if (adjustedMinute >= 60) {
+            adjustedHour += Math.floor(adjustedMinute / 60);
+            adjustedMinute %= 60;
+          }
+
+          const period = adjustedHour >= 12 ? "PM" : "AM";
+          const hour12 = adjustedHour % 12 || 12;
+          return `${hour12}:${adjustedMinute
+            .toString()
+            .padStart(2, "0")} ${period}`;
+        }
+        // const maghrib_idx = rows[1].split(",")[maghribIndex];
+        const date_end = rows[1].split(",")[date_endIndex];
+        let fajr_igma_time;
+        let newCurrentTIme = currentDate.getDate().toString().padStart(2, "0");
+        let magrib_time = rows[1].split(",")[maghribIndex];
+        let int_magrib = parseInt(magrib_time);
+        if (date_end >= newCurrentTIme) {
+          fajr_igma_time = rows[1].split(",")[fajrIndex];
+        } else {
+          fajr_igma_time = rows[2].split(",")[fajrIndex];
+        }
+        const Maghrib_iqma = convertTo12HourFormat(
+          todayData.Maghrib,
+          int_magrib
+        );
+        const rawIftar = convertTo12HourFormat(todayData.Maghrib);
+        setprayerIftar(rawIftar);
+        console.log(prayerIftar, "IFTAR");
+        setPrayerData({
+          date: todayData.readable,
+          fajr: {
+            time: convertTo12HourFormat(todayData.Fajr),
+            iqama: fajr_igma_time, // Adjust the index accordingly
+          },
+          dhuhr: {
+            time: convertTo12HourFormat(todayData.Dhuhr),
+            iqama: rows[1].split(",")[dhuhrIndex], // Adjust the index accordingly
+          },
+          asr: {
+            time: convertTo12HourFormat(todayData.Asr),
+            iqama: rows[1].split(",")[asrIndex], // Adjust the index accordingly
+          },
+          maghrib: {
+            time: convertTo12HourFormat(todayData.Maghrib),
+            iqama: Maghrib_iqma, // You may adjust this if you have Maghrib Iqama data
+          },
+          isha: {
+            time: convertTo12HourFormat(todayData.Isha),
+            iqama: rows[1].split(",")[ishaIndex], // Adjust the index accordingly
+          },
+        });
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
     fetchPrayerData();
     const interval = setInterval(() => {
       const sanAntonioTime = moment.tz("America/Chicago");
@@ -30,102 +126,7 @@ function PrayerTimes() {
       setCurrentTime(formattedTime);
     }, 1000);
     return () => clearInterval(interval);
-  }, []);
-
-  const fetchPrayerData = async () => {
-    try {
-      const currentDate = new Date();
-
-    
-      const response = await fetch(
-        `https://prayerdata.contact-c64.workers.dev/`
-      );
-      const data = await response.json();
-      const todayData = data.data.timings;
-      setPrayerMasterData(todayData);
-      const hijriNumber = data.data.date.hijri.month.number;
-
-      const iqma_response = await fetch(
-        "https://docs.google.com/spreadsheets/d/e/2PACX-1vSeZ26h2oufYXq0i04ioOoH7aDkOHl0pvQ9E8mbIzxpVsElIoeUq0FJhwRgHkaiRlPn6IEcoM-0vty9/pub?output=csv"
-      );
-      const Iqma_data = await iqma_response.text();
-      const rows = Iqma_data.split("\n");
-      const headerRow = rows[0].split(",");
-
-      // const date_startIndex = headerRow.indexOf("Date Start");
-      const date_endIndex = headerRow.indexOf("Date End");
-      const fajrIndex = headerRow.indexOf("Fajr");
-      const dhuhrIndex = headerRow.indexOf("Dhur");
-      const asrIndex = headerRow.indexOf("Asr");
-      const maghribIndex = headerRow.indexOf("Maghrib");
-      const ishaIndex = headerRow.findIndex((header) =>
-        header.includes("Isha")
-      );
-      if (hijriNumber === 9) {
-        setIsRamadan(true);
-      } else {
-        setIsRamadan(false);
-      }
-
-      // Extracting prayer times from the API response
-      function convertTo12HourFormat(time24, offsetMinutes = 0) {
-        const [hour, minute] = time24.split(":");
-        let adjustedHour = parseInt(hour, 10);
-        let adjustedMinute = parseInt(minute, 10) + offsetMinutes;
-
-        if (adjustedMinute >= 60) {
-          adjustedHour += Math.floor(adjustedMinute / 60);
-          adjustedMinute %= 60;
-        }
-
-        const period = adjustedHour >= 12 ? "PM" : "AM";
-        const hour12 = adjustedHour % 12 || 12;
-        return `${hour12}:${adjustedMinute
-          .toString()
-          .padStart(2, "0")} ${period}`;
-      }
-      // const maghrib_idx = rows[1].split(",")[maghribIndex];
-      const date_end = rows[1].split(",")[date_endIndex];
-      let fajr_igma_time;
-      let newCurrentTIme = currentDate.getDate().toString().padStart(2, "0");
-      let magrib_time = rows[1].split(",")[maghribIndex];
-      let int_magrib = parseInt(magrib_time);
-      if (date_end >= newCurrentTIme) {
-        fajr_igma_time = rows[1].split(",")[fajrIndex];
-      } else {
-        fajr_igma_time = rows[2].split(",")[fajrIndex];
-      }
-      const Maghrib_iqma = convertTo12HourFormat(todayData.Maghrib, int_magrib);
-      const rawIftar = convertTo12HourFormat(todayData.Maghrib);
-      setprayerIftar(rawIftar);
-      console.log(prayerIftar, "IFTAR");
-      setPrayerData({
-        date: todayData.readable,
-        fajr: {
-          time: convertTo12HourFormat(todayData.Fajr),
-          iqama: fajr_igma_time, // Adjust the index accordingly
-        },
-        dhuhr: {
-          time: convertTo12HourFormat(todayData.Dhuhr),
-          iqama: rows[1].split(",")[dhuhrIndex], // Adjust the index accordingly
-        },
-        asr: {
-          time: convertTo12HourFormat(todayData.Asr),
-          iqama: rows[1].split(",")[asrIndex], // Adjust the index accordingly
-        },
-        maghrib: {
-          time: convertTo12HourFormat(todayData.Maghrib),
-          iqama: Maghrib_iqma, // You may adjust this if you have Maghrib Iqama data
-        },
-        isha: {
-          time: convertTo12HourFormat(todayData.Isha),
-          iqama: rows[1].split(",")[ishaIndex], // Adjust the index accordingly
-        },
-      });
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  }, [prayerIftar]);
 
   const currentTimee = new Date();
   const currentHours = currentTimee.getHours();
@@ -179,8 +180,7 @@ function PrayerTimes() {
               <div className="ramadanItems">
                 <h3>Imsak</h3>
                 <p>
-                  {PrayerMasterData.Imsak ? PrayerMasterData.Imsak : "-"}{" "}
-                  AM
+                  {PrayerMasterData.Imsak ? PrayerMasterData.Imsak : "-"} AM
                 </p>
               </div>
 
@@ -195,8 +195,8 @@ function PrayerTimes() {
         )}
       </div>
       <div>
-        {isRamadan ?  <h2 id="title">Prayer Times</h2>:<></> }
-       
+        {isRamadan ? <h2 id="title">Prayer Times</h2> : <></>}
+
         <div className="prayer-info">
           {prayerTimes.map((prayer) => (
             <div key={prayer}>
