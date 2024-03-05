@@ -1,4 +1,5 @@
 /* Base styles for all viewports */
+@import url('https://fonts.googleapis.com/css2?family=Aladin&display=swap');
 #prayerTimes {
   font-family: Arial, sans-serif;
   font-weight: 500;
@@ -6,8 +7,24 @@
   padding: 20px;
   display: grid;
   gap: 20px;
-}
 
+}
+h2{
+  font-family: "Aladin", system-ui;
+
+  letter-spacing: 2px;
+}
+h3{
+  font-family: "Aladin", system-ui;
+  letter-spacing: 2px;
+
+}
+p{
+  font-weight: 500;
+}
+#title{
+  color:#CD9A50 ;
+}
 #dateElement {
   font-size: 24px;
   margin-bottom: 20px;
@@ -27,6 +44,24 @@
 .prayer-item {
   height: 205px !important;
   
+}
+.ramadan_wrapper{
+  display: flex;
+  justify-content: center;
+  border: 3px solid #223881;
+  border-radius: 50px;
+  height: 144px;
+  background-color: #CD9A50;
+text-transform: uppercase;
+}
+.ramadan_wrapper p{
+  color: black;
+}
+.ramadan_wrapper h3{
+  color: black;
+}
+.ramadanItems{
+  margin: 10px;
 }
 /* Styles for mobile view */
 @media screen and (max-width: 767px) {
