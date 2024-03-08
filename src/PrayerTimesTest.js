@@ -1,3 +1,9 @@
+/*
+Bismillah ir-Rahman ir-Rahim
+This code pertains to the prayer times on MCECC Masjid in San Antonio, Texas.
+mcecc.com
+Blessings from any benefit to the muslim community is intended to go towards the Baksh and Younis family, both Past and Present Inshallah. 
+*/
 import React, { useState, useEffect } from "react";
 import moment from "moment-timezone"; // Import moment-timezone
 import "./PrayerTimesTest.css";
