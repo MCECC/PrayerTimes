@@ -38,9 +38,14 @@ function PrayerTimes() {
         const iqma_response = await fetch(
           "https://docs.google.com/spreadsheets/d/e/2PACX-1vSeZ26h2oufYXq0i04ioOoH7aDkOHl0pvQ9E8mbIzxpVsElIoeUq0FJhwRgHkaiRlPn6IEcoM-0vty9/pub?output=csv"
         );
+        
         const Iqma_data = await iqma_response.text();
         const rows = Iqma_data.split("\n");
         const headerRow = rows[0].split(",");
+        
+         // Log Iqma_data to console
+        console.log("Iqma_data:", Iqma_data);
+
 
         // const date_startIndex = headerRow.indexOf("Date Start");
         const date_endIndex = headerRow.indexOf("Date End");
@@ -178,7 +183,7 @@ function PrayerTimes() {
             <h2 id="title">Ramadan Times</h2>
             <div className="ramadan_wrapper" id="pr;ayerTimes">
               <div className="ramadanItems">
-                <h3>Imsak</h3>
+                <h3>Suhoor</h3>
                 <p>
                   {PrayerMasterData.Imsak ? PrayerMasterData.Imsak : "-"} AM
                 </p>
