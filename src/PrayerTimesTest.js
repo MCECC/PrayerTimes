@@ -9,7 +9,7 @@ import moment from "moment-timezone"; // Import moment-timezone
 import "./PrayerTimesTest.css";
 
 function PrayerTimes() {
-  const [prayerData, setPrayerData] = useState({
+  const [prayerData, setPrayerData] = useState({   
     date: "Fetching data...",
     fajr: { time: "-", iqama: "-" },
     dhuhr: { time: "-", iqama: "-" },
@@ -191,7 +191,7 @@ function PrayerTimes() {
               <div className="ramadanItems">
                 <h3>Suhoor</h3>
                 <p>
-                  {PrayerMasterData.Imsak ? PrayerMasterData.Imsak : "-"} AM
+                  {PrayerMasterData.Fajr ? PrayerMasterData.Fajr : "-"} AM
                 </p>
               </div>
 
