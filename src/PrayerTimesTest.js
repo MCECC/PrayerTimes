@@ -17,12 +17,7 @@ function PrayerTimes() {
     maghrib: { time: "-", iqama: "-" },
     isha: { time: "-", iqama: "-" },
   });
-  /*
-  const [hijriMonth, setHijriMonth] = useState("");
-  const [hijriYear, setHijriYear] = useState("");
-  const [hijriDay, setHijriDay] = useState("");
-  
- */
+
   const [PrayerMasterData, setPrayerMasterData] = useState([]);
   const [prayerIftar, setprayerIftar] = useState();
 
@@ -53,7 +48,6 @@ function PrayerTimes() {
         console.log("Iqma_data:", Iqma_data);
 
 
-        // const date_startIndex = headerRow.indexOf("Date Start");
         const date_endIndex = headerRow.indexOf("Date End");
         const fajrIndex = headerRow.indexOf("Fajr");
         const dhuhrIndex = headerRow.indexOf("Dhur");
@@ -85,7 +79,6 @@ function PrayerTimes() {
             .toString()
             .padStart(2, "0")} ${period}`;
         }
-        // const maghrib_idx = rows[1].split(",")[maghribIndex];
         const date_end = rows[1].split(",")[date_endIndex];
         let fajr_igma_time;
         let newCurrentTIme = currentDate.getDate().toString().padStart(2, "0");
@@ -163,7 +156,6 @@ function PrayerTimes() {
   // Function to calculate the current prayer
 
   const currentDate = new Date();
-  // const month = currentDate.getMonth() + 1; // Adding 1 to get a 1-based index
 
   console.log("Month:", currentDate);
   // Function to format the date
@@ -174,10 +166,6 @@ function PrayerTimes() {
   });
   // const isRamadan = true; // Change this based on your data
 
-  // Check if the current day is Friday
-  // const isFriday = moment.tz('America/Chicago').isoWeekday() === 5;
-  //<h3 id="date_hijra">{hijriMonth} {hijriDay}, {hijriYear}</h3>
-  // Data Display
   return (
     <div id="prayerTimes">
       <div>
@@ -224,9 +212,6 @@ function PrayerTimes() {
         </div>
       </div>
 
-      {/* Display Imsak and Iftar times only during Ramadan */}
-
-      {/* ... (existing code) */}
     </div>
   );
 }
