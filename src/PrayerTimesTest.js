@@ -27,7 +27,7 @@ function PrayerTimes() {
     const fetchData = async () => {
       try {
         const [prayerResponse, iqamaResponse] = await Promise.all([
-          fetch("https://prayerdata.contact-c64.workers.dev/").then(res => res.json()),
+          fetch("https://prayertimesdata.mcecc.com/").then(res => res.json()),
           fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vSeZ26h2oufYXq0i04ioOoH7aDkOHl0pvQ9E8mbIzxpVsElIoeUq0FJhwRgHkaiRlPn6IEcoM-0vty9/pub?output=csv").then(res => res.text())
         ]);
 
